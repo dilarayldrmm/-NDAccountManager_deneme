@@ -1,0 +1,32 @@
+.manage-container {
+  padding: 20px;
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.account-form input {
+  padding: 8px;
+  font-size: 1rem;
+}
+
+.account-form button {
+  background-color: #ff8c00;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.account-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.account-list li {
+  padding: 5px 0;
+}

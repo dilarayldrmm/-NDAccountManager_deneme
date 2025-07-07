@@ -6,11 +6,28 @@ function Home({ userRole }) {
   const [activeTab, setActiveTab] = useState("personel");
 
   const renderContent = () => {
-    if (activeTab === "personel") {
-      return <div>Personel hesapları burada listelenir.</div>;
-    } else if (activeTab === "shared") {
-      return <div>Paylaşılan hesaplar burada listelenir.</div>;
-    }
+   if (activeTab === "personel") {
+  return (
+    <div>
+      <h3>Kaydedilen Hesaplar</h3>
+      <ul className="account-list">
+        {/* Örnek sabit veri, sonra burası API'den alınabilir */}
+        <li>Gmail - kullanici@gmail.com</li>
+        <li>LinkedIn - isimsoyisim</li>
+      </ul>
+
+      <div className="add-account-form">
+        <h4>Yeni Hesap Ekle</h4>
+        <form>
+          <input type="text" placeholder="Platform Adı (ör: Gmail)" />
+          <input type="text" placeholder="Kullanıcı Adı veya Email" />
+          <input type="password" placeholder="Şifre" />
+          <button type="submit">Kaydet</button>
+        </form>
+      </div>
+    </div>
+  );
+}
   };
 
   return (

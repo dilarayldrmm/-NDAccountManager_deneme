@@ -1,0 +1,74 @@
+.home-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #fffaf5;
+  color: #333;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ff8800;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.tab-header {
+  margin-top: 20px;
+}
+
+.tab-header button {
+  margin-right: 10px;
+  padding: 10px 15px;
+  background-color: #fff;
+  border: 2px solid #ff8800;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tab-header .active {
+  background-color: #ff8800;
+  color: white;
+}
+
+.account-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.account-list li {
+  padding: 8px;
+  background-color: #fff3e0;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.add-account-form {
+  margin-top: 20px;
+}
+
+.add-account-form input {
+  display: block;
+  margin: 8px 0;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-account-form button {
+  background-color: #ff8800;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,18 +1,16 @@
 import React from "react";
-import MainLayout from "./components/MainLayout";
+import Login from "./components/Login";
+import UserList from "./components/UserList";
+import { useIsAuthenticated } from "@azure/msal-react";
 
 function App() {
+  const isAuthenticated = useIsAuthenticated();
+
   return (
-    <>
-      <MainLayout />
-    </>
+    <div className="App">
+      {isAuthenticated ? <UserList /> : <Login />}
+    </div>
   );
 }
 
 export default App;
-<div style={styles.container}>
-  <h2 style={styles.title}>NDAccountManager</h2>
-  <button style={styles.button} onClick={handleLogin}>
-    Microsoft ile Giriş Yap
-  </button>
-</div>

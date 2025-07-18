@@ -1,48 +1,59 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "../styles/MainLayout.css";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
- 
 
 function Home({ userRole }) {
   const [activeTab, setActiveTab] = useState("personel");
+  const [accounts, setAccounts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const renderContent = () => {
-   if (activeTab === "personel") {
-  return (
-    <div>
-      <h3>Kaydedilen Hesaplar</h3>
+  useEffect(() => {
+    // Veritabanından hesapları çek
+    const fetchAccounts = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/accounts");
+        setAccounts(response.data);
+      } catch (err) {
+        setError("Veriler alınırken hata oluştu.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAccounts();
+  }, []);
+
+  const filteredAccounts = accounts.filter((acc) => {
+    if (activeTab === "personel") {
+      return acc.isShared === false;
+    } else {
+      return acc.isShared === true;
+    }
+  });
+
+  const renderAccounts = () => {
+    if (loading) return <p>Yükleniyor...</p>;
+    if (error) return <p style={{ color: "red" }}>{error}</p>;
+    if (filteredAccounts.length === 0) return <p>Hiç hesap kaydı yok.</p>;
+
+    return (
       <ul className="account-list">
-        {/* Örnek sabit veri, sonra burası API'den alınabilir */}
-        <li>Gmail - kullanici@gmail.com</li>
-        <li>LinkedIn - isimsoyisim</li>
+        {filteredAccounts.map((acc) => (
+          <li key={acc.id} className="account-card">
+            <h4>{acc.platform}</h4>
+            <p><strong>Kullanıcı Adı:</strong> {acc.username}</p>
+            <p><strong>IP:</strong> {acc.ipAddress}</p>
+            <p><strong>Kategori:</strong> {acc.category}</p>
+          </li>
+        ))}
       </ul>
-
-      <div className="add-account-form">
-        <h4>Yeni Hesap Ekle</h4>
-        <form>
-          <input type="text" placeholder="Platform Adı (ör: Gmail)" />
-          <input type="text" placeholder="Kullanıcı Adı veya Email" />
-          <input type="password" placeholder="Şifre" />
-          <button type="submit">Kaydet</button>
-        </form>
-      </div>
-    </div>
-  );
-}
+    );
   };
 
   return (
     <div className="home-container">
-      {/* Üst Menü */}
-      <nav className="top-nav">
-        <Link to="/account" className="nav-link">Hesap Bilgileri</Link>
-        {userRole === "Manager" && (
-          <Link to="/settings" className="nav-link">Ayarlar</Link>
-        )}
-      </nav>
-
-      {/* Sekmeler */}
-      <div className="tab-header">
+      <div className="tabs">
         <button
           className={activeTab === "personel" ? "active" : ""}
           onClick={() => setActiveTab("personel")}
@@ -50,15 +61,16 @@ function Home({ userRole }) {
           Personel
         </button>
         <button
-          className={activeTab === "shared" ? "active" : ""}
-          onClick={() => setActiveTab("shared")}
+          className={activeTab === "paylasilanlar" ? "active" : ""}
+          onClick={() => setActiveTab("paylasilanlar")}
         >
           Paylaşılanlar
         </button>
       </div>
 
       <div className="tab-content">
-        {renderContent()}
+        <h3>{activeTab === "personel" ? "Kaydedilen Hesaplar" : "Paylaşılan Hesaplar"}</h3>
+        {renderAccounts()}
       </div>
     </div>
   );

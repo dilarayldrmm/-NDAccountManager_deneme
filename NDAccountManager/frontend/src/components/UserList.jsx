@@ -11,7 +11,7 @@ function UserList() {
       .then((response) => {
         const token = response.accessToken;
 
-        fetch("http://localhost:5222/api/users", {
+        fetch("http://localhost:5059/api/users", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

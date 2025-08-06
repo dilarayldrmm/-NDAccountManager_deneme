@@ -1,9 +1,8 @@
 import { useMsal } from "@azure/msal-react";
-import { msalConfig, loginRequest } from "../authConfig";
+
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-
-
+import { msalConfig, loginRequest } from "../authConfig"; // ✅ sadece bu satır kalsın
 const Login = () => {
   const { instance, accounts } = useMsal();
   const navigate = useNavigate();
@@ -11,15 +10,12 @@ const Login = () => {
   const handleLogin = () => {
     const activeAccount = instance.getActiveAccount();
     const inProgress = sessionStorage.getItem("msal.interaction.status");
-
-    // Hâlihazırda giriş yapılmadıysa ve bir işlem sürmüyorsa giriş başlat
     if (!activeAccount && inProgress !== "interaction_in_progress") {
       instance.loginRedirect(loginRequest);
     }
   };
 
   useEffect(() => {
-    // Eğer giriş yapılmışsa otomatik olarak ana sayfaya yönlendir
     if (accounts.length > 0) {
       navigate("/home");
     }

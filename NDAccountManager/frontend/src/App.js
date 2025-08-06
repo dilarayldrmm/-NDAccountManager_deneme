@@ -3,16 +3,29 @@ import { useMsal } from "@azure/msal-react";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import { getUserRoleFromAccount } from "./utils/authUtils";
+
+// Bu içerik App'ten silinip AppContent içine taşınacak:
+// instance.setActiveAccount(accounts[0]) ayarı burada yapılmalı
 
 const AppContent = () => {
-  const { accounts } = useMsal();
+  const { instance, accounts } = useMsal();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (accounts.length > 0) {
-      navigate("/home");
+    if (accounts && accounts.length > 0) {
+      instance.setActiveAccount(accounts[0]); // ✔️ buraya taşıdık
+      const role = getUserRoleFromAccount(accounts[0]);
+
+      if (role === "Manager") {
+        navigate("/home");
+      } else if (role === "Support") {
+        navigate("/support-dashboard");
+      } else {
+        navigate("/home");
+      }
     }
-  }, [accounts, navigate]);
+  }, [accounts, navigate, instance]);
 
   return (
     <Routes>

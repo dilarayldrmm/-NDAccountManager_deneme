@@ -1,19 +1,23 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import "./Navbar.css";
+import "../styles/Navbar.css";
 
-function Navbar() {
+const Navbar = ({ activeTab, setActiveTab }) => {
   return (
-    <nav className="navbar">
-      <div className="nav-logo">NDAccountManager</div>
-      <div className="nav-links">
-        <Link to="/home">Anasayfa</Link>
-        <Link to="/account">Hesaplar</Link>
-        <Link to="/settings">Ayarlar</Link>
-      </div>
-    </nav>
+    <div className="navbar">
+      <button
+        className={activeTab === "personel" ? "active" : ""}
+        onClick={() => setActiveTab("personel")}
+      >
+        Personel
+      </button>
+      <button
+        className={activeTab === "paylasilanlar" ? "active" : ""}
+        onClick={() => setActiveTab("paylasilanlar")}
+      >
+        Paylaşılanlar
+      </button>
+    </div>
   );
-}
+};
 
 export default Navbar;
-

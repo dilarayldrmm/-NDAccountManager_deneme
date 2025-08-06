@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "7/yvsnDRTixX0vVer35KSjS1HzfM4rGxA/gc1emwSdw=",
-  "Source": "backend",
-  "BasePath": "_content/backend",
+  "Hash": "B1QdbOwwMMmAD7SEiS+rTkI+OPOz1a3MYifNoMqS8nY=",
+  "Source": "NDAccountManager.API",
+  "BasePath": "_content/NDAccountManager.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

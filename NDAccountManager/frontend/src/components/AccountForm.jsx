@@ -1,57 +1,58 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const AccountForm = ({ onSave, selectedAccount, token }) => {
-  const [form, setForm] = useState({
-    platform: "",
-    email: "",
-    password: "",
-    ipAddress: "",
-    notes: "",
-  });
+function AccountForm({ account, onSave }) {
+  const [platform, setPlatform] = useState(account?.platform || "");
+  const [username, setUsername] = useState(account?.username || "");
+  const [email, setEmail] = useState(account?.email || "");
+  const [ipAddress, setIpAddress] = useState(account?.ipAddress || "");
+  const [notes, setNotes] = useState(account?.notes || "");
+  const [sharedWith, setSharedWith] = useState(account?.sharedWithUserIds || []);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    if (selectedAccount) {
-      setForm(selectedAccount);
-    }
-  }, [selectedAccount]);
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const method = selectedAccount ? "PUT" : "POST";
-    const url = selectedAccount
-      ? `http://localhost:5222/api/accounts/${selectedAccount.id}`
-      : "http://localhost:5222/api/accounts";
-
-    const res = await fetch(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(form),
+    axios.get("/api/users").then(res => {
+      setUsers(res.data);
     });
+  }, []);
 
-    if (res.ok) {
-      const data = await res.json();
-      onSave(data);
-      setForm({ platform: "", email: "", password: "", ipAddress: "", notes: "" });
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newAccount = {
+      platform,
+      username,
+      email,
+      ipAddress,
+      notes,
+      sharedWithUserIds: sharedWith
+    };
+    onSave(newAccount);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="platform" value={form.platform} onChange={handleChange} placeholder="Platform" />
-      <input name="email" value={form.email} onChange={handleChange} placeholder="E-posta" />
-      <input name="password" value={form.password} onChange={handleChange} placeholder="Şifre" />
-      <input name="ipAddress" value={form.ipAddress} onChange={handleChange} placeholder="IP Adresi" />
-      <input name="notes" value={form.notes} onChange={handleChange} placeholder="Notlar" />
-      <button type="submit">{selectedAccount ? "Güncelle" : "Ekle"}</button>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <input value={platform} onChange={e => setPlatform(e.target.value)} placeholder="Platform" />
+      <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Kullanıcı Adı" />
+      <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
+      <input value={ipAddress} onChange={e => setIpAddress(e.target.value)} placeholder="IP Adresi" />
+      <textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Not" />
+
+      <label>Paylaşım:</label>
+      <select
+        multiple
+        value={sharedWith}
+        onChange={(e) =>
+          setSharedWith(Array.from(e.target.selectedOptions, (option) => option.value))
+        }
+      >
+        {users.map(user => (
+          <option key={user.id} value={user.id}>{user.displayName}</option>
+        ))}
+      </select>
+
+      <button type="submit">Kaydet</button>
     </form>
   );
-};
+}
 
 export default AccountForm;

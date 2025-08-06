@@ -1,0 +1,75 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1rem;
+  max-width: 400px;
+}
+
+input, textarea {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px;
+  background-color: #ff8400;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 16px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.account-form input,
+.account-form select,
+.account-form button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.account-form button {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.account-form button:hover {
+  background-color: #45a049;
+}
+
+.checkbox-label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.multi-select {
+  height: 100px;
+  padding: 8px;
+}
+
+.error-msg {
+  color: red;
+  font-weight: bold;
+}
+
+.success-msg {
+  color: green;
+  font-weight: bold;
+}

@@ -1,12 +1,16 @@
-using backend.Data;
-using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NDAccountManager.API.Data;
+using NDAccountManager.API.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace backend.Controllers
+namespace NDAccountManager.API.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class AccountsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -16,18 +20,18 @@ namespace backend.Controllers
             _context = context;
         }
 
-        // GET: api/accounts
+        // GET: api/Accounts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
         {
-            return await _context.Accounts.Include(a => a.User).ToListAsync();
+            return await _context.Accounts.ToListAsync();
         }
 
-        // GET: api/accounts/5
+        // GET: api/Accounts/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetAccount(int id)
+        public async Task<ActionResult<Account>> GetAccount(Guid id)
         {
-            var account = await _context.Accounts.Include(a => a.User).FirstOrDefaultAsync(a => a.Id == id);
+            var account = await _context.Accounts.FindAsync(id);
 
             if (account == null)
                 return NotFound();
@@ -35,24 +39,26 @@ namespace backend.Controllers
             return account;
         }
 
-        // POST: api/accounts
+        // POST: api/Accounts
         [HttpPost]
         public async Task<ActionResult<Account>> CreateAccount(Account account)
         {
+            account.Id = Guid.NewGuid(); // Yeni ID oluşturuluyor
+
             _context.Accounts.Add(account);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetAccount), new { id = account.Id }, account);
         }
 
-        // PUT: api/accounts/5
+        // PUT: api/Accounts/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAccount(int id, Account updatedAccount)
+        public async Task<IActionResult> UpdateAccount(Guid id, Account account)
         {
-            if (id != updatedAccount.Id)
-                return BadRequest();
+            if (id != account.Id)
+                return BadRequest("ID uyuşmazlığı");
 
-            _context.Entry(updatedAccount).State = EntityState.Modified;
+            _context.Entry(account).State = EntityState.Modified;
 
             try
             {
@@ -60,20 +66,21 @@ namespace backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Accounts.Any(a => a.Id == id))
+                if (!AccountExists(id))
                     return NotFound();
-                else
-                    throw;
+
+                throw;
             }
 
             return NoContent();
         }
 
-        // DELETE: api/accounts/5
+        // DELETE: api/Accounts/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(int id)
+        public async Task<IActionResult> DeleteAccount(Guid id)
         {
             var account = await _context.Accounts.FindAsync(id);
+
             if (account == null)
                 return NotFound();
 
@@ -81,6 +88,11 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        private bool AccountExists(Guid id)
+        {
+            return _context.Accounts.Any(e => e.Id == id);
         }
     }
 }

@@ -11,5 +11,5 @@ export const msalConfig = {
 };
 
 export const loginRequest = {
-  scopes: ["User.Read"], // veya backend API scope'un varsa onu ekle
+ scopes: ["User.Read", "Directory.Read.All"]
 };
